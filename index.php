@@ -64,6 +64,7 @@ foreach($files as $file){
     if(is_file($file))
     unlink($file); //delete file
 }
+file_put_content("test.txt","lalala");
 if(isset($_POST['submit'])) {
 	$username = $_POST['username'];
 	$contentq = get_user_data($username);
