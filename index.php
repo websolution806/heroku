@@ -1,49 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<div class="container">  
-	<div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-1 col-sm-8 col-sm-offset-2">     
-        <div class="panel panel-info" >
-            <div style="padding-top:30px" class="panel-body" >
-				<form id="loginform" enctype="multipart/form-data" class="form-horizontal" action="" method="POST">
-						<div style="margin-bottom: 25px" class="input-group">
-							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-							<input id="username" type="text" class="form-control" name="username" placeholder="Instagram username" required>
-						</div>
-					<div style="margin-top:10px" class="form-group">
-						<div class="col-sm-12 controls">
-						  <button type="submit" name="submit" class="btn btn-primary">Run</button>
-						</div>
-					</div>  
-			   </form>
-				<div>
-					<h3>Upload csv file:</h3>
-					<form action="" method="post" enctype="multipart/form-data">
-					<table>
-						<tr>
-							<td width="20%"><input type="file" name="file" id="file" /></td>
-							<td><input type="submit" name="upload_file" value="Submit"/></td>
-						</tr>
-					</table>
-					</form>
-				</div>						   
-	
-			</div>                     
-		</div>  
-	</div>
-</div> 
-</html>
-
 <?php
 $actual_link =  "http://" . $_SERVER['SERVER_NAME'];
 //echo $actual_link;
@@ -64,7 +18,6 @@ foreach($files as $file){
     if(is_file($file))
     unlink($file); //delete file
 }
-file_put_content("test.txt","lalala");
 if(isset($_POST['submit'])) {
 	$username = $_POST['username'];
 	$contentq = get_user_data($username);
@@ -83,7 +36,7 @@ if(isset($_POST['submit'])) {
 		foreach ($list as $line){
 			fputcsv($file,explode(',',$line));
 		}
-		 echo '<a href="'.$actual_link.'/download.php" target="_blank">Download CSV</a>';
+		 $single_user_result = '<a href="'.$actual_link.'/instagram/download.php">Download CSV</a>';
 	}else{
 		echo "User not found";
 	}
@@ -116,48 +69,107 @@ if(isset($_POST["upload_file"]) ) {
 				
 				
 				$file = fopen("upload/users_list.csv","r");
+				//print_r(fgetcsv($file));
 				
 				$users_file = fopen("contacts.csv","w");
 				
 				fputcsv($users_file, explode(',','username,full_name,profile_pic_url,followed_by,follows_count,profile_pic_url_hd_'));
 				fclose($users_file);
 				while(!feof($file))
-				  {
-					if(fgetcsv($file)){
-						$userName = fgetcsv($file);
-						//echo $userName[0]."<br>";
-						
-						$contents = get_user_data($userName[0]);
-						/* echo "<pre>";
-						print_R($contents);
-						echo "</pre>"; */
-						$user_name = $contents['user']['username'];						
-						$user_full_name= $contents ['user']['full_name'];						
-						$porfile_pic_url = $contents['user']['profile_pic_url']; 							
-						$followed_by = $contents['user']['followed_by']['count']; 						
-						$follows = $contents['user']['follows']['count']; 					
-						$profile_hd_url = $contents['user']['profile_pic_url_hd']; 
-						//echo $user_name.' '.$user_full_name.'<br>';
-						/* if($user_name == ""){
+				  {	
+					$userName = fgetcsv($file);
+					if($userName[0] != ""){ 
+						$contents = get_user_data($userName[0]); 
+						$user_name = $contents['user']['username'];	
+						if($user_name == ""){
 							$user_name = $userName[0];
-							$user_full_name = "Not found";
-						} */
+						}
+						$user_full_name= $contents ['user']['full_name'];
+						if($user_full_name == ""){
+							$user_full_name = "not found";
+						}						
+						$porfile_pic_url = $contents['user']['profile_pic_url']; 
+						if($porfile_pic_url == ""){
+							$porfile_pic_url = "not found";
+						}						
+						$followed_by = $contents['user']['followed_by']['count']; 
+						if($followed_by == ""){
+							$followed_by = "not found";
+						}						
+						$follows = $contents['user']['follows']['count'];
+						if($follows == ""){
+							$follows = "not found";
+						}						
+						$profile_hd_url = $contents['user']['profile_pic_url_hd']; 
+						if($profile_hd_url == ""){
+							$profile_hd_url = "not found";
+						}
+						//echo $user_name.' '.$user_full_name.'<br>';
+						
 						$list = $user_name.','.$user_full_name.','.$porfile_pic_url.','.$followed_by.','.$follows.','.$profile_hd_url;
 						//echo $list."<br>";
 						$users_file = fopen("contacts.csv","a");
 						fputcsv($users_file, explode(',',$list));
 						fclose($users_file);
 					}
+  
 				}
 							
 				fclose($file);
-				echo '<a href="'.$actual_link.'/download.php" target="_blank">Download CSV</a>';
+				$multi_user = '<a class="link" href="'.$actual_link.'/instagram/download.php">Download CSV</a>';
             }
         }
     } else {
              echo "No file selected <br />";
     }
 }
-
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<div class="container">  
+	<div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-1 col-sm-8 col-sm-offset-2">     
+        <div class="panel panel-info" >
+            <div style="padding-top:30px" class="panel-body" >
+				<form id="loginform" enctype="multipart/form-data" class="form-horizontal" action="" method="POST">
+						<div style="margin-bottom: 25px" class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input id="username" type="text" class="form-control" name="username" placeholder="Instagram username" required>
+						</div>
+					<div style="margin-top:10px" class="form-group">
+						<div class="col-sm-12 controls">
+						  <button type="submit" name="submit" class="btn btn-primary" >Run</button>
+						  <?php echo $single_user_result;?>
+						</div>
+					</div>  
+			   </form>
+				<div>
+					<h3>Upload csv file:</h3>
+					<form action="" method="post" enctype="multipart/form-data">
+					<table>
+						<tr>
+							<td width="20%"><input type="file" name="file" id="file" /></td>
+							<td><input type="submit" name="upload_file" value="Submit" required/></td>
+							<td> <?php echo $multi_user; ?></td>
+						</tr>
+					</table>
+					</form>
+				</div>						   
+	
+			</div>                     
+		</div>  
+	</div>
+</div> 
+</html>
+
 	
