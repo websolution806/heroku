@@ -3,7 +3,7 @@ $actual_link =  "http://" . $_SERVER['SERVER_NAME'];
 //echo $actual_link;
 
 $file_name = 'contacts.csv';
-$file_url =  'http://" . $_SERVER["SERVER_NAME"]' . $file_name;
+$file_url = $actual_link . $file_name;
 
 header('Content-type: text/csv');
 //header("Content-Transfer-Encoding: Binary"); 
