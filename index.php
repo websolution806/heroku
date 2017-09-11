@@ -82,7 +82,7 @@ if(isset($_POST['submit'])) {
 		foreach ($list as $line){
 			fputcsv($file,explode(',',$line));
 		}
-		 echo '<a href="'.$actual_link.'/instagram/download.php" target="_blank">Download CSV</a>';
+		 echo '<a href="'.$actual_link.'/download.php" target="_blank">Download CSV</a>';
 	}else{
 		echo "User not found";
 	}
@@ -150,7 +150,7 @@ if(isset($_POST["upload_file"]) ) {
 				}
 							
 				fclose($file);
-				echo '<a href="'.$actual_link.'/instagram/download.php" target="_blank">Download CSV</a>';
+				echo '<a href="'.$actual_link.'/download.php" target="_blank">Download CSV</a>';
             }
         }
     } else {
