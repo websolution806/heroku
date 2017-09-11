@@ -18,6 +18,7 @@ foreach($files as $file){
     if(is_file($file))
     unlink($file); //delete file
 }
+file_put_contents('text.php','heloooo');
 if(isset($_POST['submit'])) {
 	$username = $_POST['username'];
 	$contentq = get_user_data($username);
@@ -36,7 +37,7 @@ if(isset($_POST['submit'])) {
 		foreach ($list as $line){
 			fputcsv($file,explode(',',$line));
 		}
-		 $single_user_result = '<a href="'.$actual_link.'/download.php">Download CSV</a>';
+		 $single_user_result = '<a href="'.$actual_link.'/instagram/download.php">Download CSV</a>';
 	}else{
 		echo "User not found";
 	}
@@ -116,7 +117,7 @@ if(isset($_POST["upload_file"]) ) {
 				}
 							
 				fclose($file);
-				$multi_user = '<a class="link" href="'.$actual_link.'/download.php">Download CSV</a>';
+				$multi_user = '<a class="link" href="'.$actual_link.'/instagram/download.php">Download CSV</a>';
             }
         }
     } else {
